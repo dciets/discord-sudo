@@ -57,5 +57,4 @@ class Random {
     }
 }
 
-// secret :p
-export default new Random(100, 100, 100);
+export default new Random();
