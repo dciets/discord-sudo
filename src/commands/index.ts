@@ -1,6 +1,8 @@
 import DiscordJS from "discord.js";
 import i18n from "i18n";
 
+import permissions from "./permissions";
+
 import _8ball from "./8ball";
 import honk from "./honk";
 import bruh from "./bruh";
@@ -44,6 +46,8 @@ export default async (
         if (message.author.bot) return;
         if (!message.guild) return;
 
+        if (!permissions(message)) return message.react("🚫");
+
         if (message.mentions.everyone) {
             await message.react("🇦");
             await message.react("🇳");
@@ -69,7 +73,7 @@ export default async (
 
         if (commands[command]) {
             i18n.setLocale(message.author.locale || "en");
-            return commands[command](
+            return await commands[command](
                 message,
                 ...message.content.substr(prefix.length).split(" ").slice(1)
             );
