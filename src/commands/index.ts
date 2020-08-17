@@ -11,6 +11,7 @@ import pong from "./pong";
 import roll from "./roll";
 import surun from "./surun";
 import top from "./top";
+import xkcd from "./xkcd";
 import youtube from "./youtube";
 
 const prefix = "sudo ";
@@ -20,7 +21,20 @@ const commands: {
         message: DiscordJS.Message,
         ...args: string[]
     ) => Promise<any>;
-} = { _8ball, honk, bruh, fart, pick, pong, ping, roll, surun, top, youtube };
+} = {
+    _8ball,
+    honk,
+    bruh,
+    fart,
+    pick,
+    pong,
+    ping,
+    roll,
+    surun,
+    top,
+    xkcd,
+    youtube,
+};
 
 export default async (
     client: DiscordJS.Client,
