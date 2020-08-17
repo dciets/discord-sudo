@@ -1,0 +1,7 @@
+version: "3.0"
+
+services:
+    discord_sudo:
+        image: discord_sudo
+        build: .
+        hostname: discord_sudo
