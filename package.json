@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
+        "@discordjs/opus": "^0.3.2",
         "discord.js": "^12.3.1",
         "dotenv": "^8.2.0",
         "i18n": "^0.12.0",
@@ -20,7 +21,7 @@
         "postinstall": "npm audit fix",
         "prestart": "npm run build",
         "start": "node out/index.js",
-        "build": "tsc && cp package* ./out"
+        "build": "tsc && cp -R package* locales assets ./out"
     },
     "keywords": [],
     "author": "",
