@@ -8,6 +8,7 @@ import bruh from "./bruh";
 import chucknorris from "./chucknorris";
 import fart from "./fart";
 import honk from "./honk";
+import kebac from "./kebac";
 import pick from "./pick";
 import ping from "./ping";
 import pong from "./pong";
@@ -30,6 +31,7 @@ const commands: {
     chucknorris,
     fart,
     honk,
+    kebac,
     pick,
     ping,
     pong,
