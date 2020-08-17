@@ -4,6 +4,7 @@ import i18n from "i18n";
 import _8ball from "./8ball";
 import honk from "./honk";
 import bruh from "./bruh";
+import fart from "./fart";
 import pick from "./pick";
 import ping from "./ping";
 import pong from "./pong";
@@ -19,7 +20,7 @@ const commands: {
         message: DiscordJS.Message,
         ...args: string[]
     ) => Promise<any>;
-} = { _8ball, honk, bruh, pick, pong, ping, roll, surun, top, youtube };
+} = { _8ball, honk, bruh, fart, pick, pong, ping, roll, surun, top, youtube };
 
 export default async (
     client: DiscordJS.Client,
