@@ -4,9 +4,10 @@ import i18n from "i18n";
 import permissions from "./permissions";
 
 import _8ball from "./8ball";
-import honk from "./honk";
 import bruh from "./bruh";
+import chucknorris from "./chucknorris";
 import fart from "./fart";
+import honk from "./honk";
 import pick from "./pick";
 import ping from "./ping";
 import pong from "./pong";
@@ -25,12 +26,13 @@ const commands: {
     ) => Promise<any>;
 } = {
     _8ball,
-    honk,
     bruh,
+    chucknorris,
     fart,
+    honk,
     pick,
-    pong,
     ping,
+    pong,
     roll,
     surun,
     top,
