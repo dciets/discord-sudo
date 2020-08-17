@@ -12,6 +12,7 @@ import pick from "./pick";
 import ping from "./ping";
 import pong from "./pong";
 import roll from "./roll";
+import sb from "./sb";
 import surun from "./surun";
 import top from "./top";
 import xkcd from "./xkcd";
@@ -34,6 +35,7 @@ const commands: {
     ping,
     pong,
     roll,
+    sb,
     surun,
     top,
     xkcd,
