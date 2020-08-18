@@ -44,7 +44,8 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
                 key: args[0],
             });
 
-            if (file) return message.reply("file already exists");
+            if (file && file.uid !== message.author.id)
+                return message.reply("file already exists");
 
             if (args[1] === "me") {
                 const connection = await message.member.voice.channel.join();
@@ -94,6 +95,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
                 if (buf.length === 0) return message.react("👎");
 
+                if (file) await file.remove();
                 await new soundboard({
                     gid: message.guild?.id,
                     uid: message.author.id,
@@ -167,6 +169,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
                 if (buf.length === 0) return message.react("👎");
 
+                if (file) await file.remove();
                 await new soundboard({
                     gid: message.guild?.id,
                     uid: message.author.id,
@@ -221,6 +224,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
                 if (buf.length === 0) return message.react("👎");
 
+                if (file) await file.remove();
                 await new soundboard({
                     gid: message.guild?.id,
                     uid: message.author.id,
