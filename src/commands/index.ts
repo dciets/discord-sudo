@@ -4,6 +4,7 @@ import i18n from "i18n";
 import permissions from "./permissions";
 
 import _8ball from "./8ball";
+import alias from "./alias";
 import bruh from "./bruh";
 import chucknorris from "./chucknorris";
 import fart from "./fart";
@@ -19,15 +20,18 @@ import top from "./top";
 import xkcd from "./xkcd";
 import youtube from "./youtube";
 
+import aliases from "../db/alias";
+
 const prefix = "sudo ";
 
-const commands: {
+export const commands: {
     [key: string]: (
         message: DiscordJS.Message,
         ...args: string[]
     ) => Promise<any>;
 } = {
     _8ball,
+    alias,
     bruh,
     chucknorris,
     fart,
@@ -44,10 +48,7 @@ const commands: {
     youtube,
 };
 
-export default async (
-    client: DiscordJS.Client,
-    message: DiscordJS.Message
-): Promise<any> => {
+export default async (message: DiscordJS.Message): Promise<any> => {
     try {
         if (message.author.bot) return;
         if (!message.guild) return;
@@ -63,13 +64,17 @@ export default async (
             await message.react("🇾");
             return message.react("😡");
         }
-        if (client.user && message.mentions.has(client.user))
+        if (message.client.user && message.mentions.has(message.client.user))
             return message.react("👀");
 
         if (message.content.indexOf(prefix) !== 0) return;
 
         let command = message.content.substr(prefix.length).split(" ")[0];
         if (/^\d/.test(command)) command = "_" + command;
+        let args: string[] = message.content
+            .substr(prefix.length)
+            .split(" ")
+            .slice(1);
 
         console.log(
             message.member?.displayName,
@@ -77,20 +82,28 @@ export default async (
             message.content
         );
 
+        const al = await aliases.findOne({
+            gid: message.guild.id,
+            key: command,
+        });
+
+        if (al) {
+            const split = al.val.split(" ");
+            command = split[0];
+            args = split.slice(1);
+        }
+
         if (commands[command]) {
             i18n.setLocale(message.author.locale || "en");
-            return await commands[command](
-                message,
-                ...message.content.substr(prefix.length).split(" ").slice(1)
-            );
+            return await commands[command](message, ...args);
         }
 
         console.log("command not found", command);
-        return message.reply("koi");
+        return message.react("❓");
     } catch (e) {
         console.error(e);
         if (process.env.NODE_ENV !== "production")
-            return message.reply(e.message);
-        else return message.reply("☠️");
+            return message.reply(`${e.message}\n\`\`\`${e.stack}\`\`\``);
+        else return message.react("☠️");
     }
 };

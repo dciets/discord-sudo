@@ -1,7 +1,25 @@
 version: "3.0"
 
 services:
-    discord_sudo:
+    discord_sudo_bot:
         image: discord_sudo
         build: .
-        hostname: discord_sudo
+        hostname: discord-sudo
+        environment:
+            - "NODE_ENV=production"
+            - "MONGO_DB=mongodb://discord-sudo-mongo:27017/prod"
+        depends_on:
+            - discord_sudo_mongo
+
+    discord_sudo_mongo:
+        image: mongo
+        hostname: discord-sudo-mongo
+        volumes:
+            - discord_sudo_mongo_data:/data/db
+        expose:
+            - "27017"
+        ports:
+            - "27017:27017"
+
+volumes:
+    discord_sudo_mongo_data:

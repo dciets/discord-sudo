@@ -5,15 +5,19 @@
     "main": "index.js",
     "dependencies": {
         "@discordjs/opus": "^0.3.2",
-        "audio-mixer": "^2.1.4",
         "discord.js": "^12.3.1",
         "dotenv": "^8.2.0",
+        "ffmpeg-static": "^4.2.7",
         "googleapis": "^59.0.0",
+        "gridfs": "^1.0.0",
         "i18n": "^0.12.0",
+        "mongoose": "^5.10.0",
         "node-fetch": "^2.6.0"
     },
     "devDependencies": {
+        "@types/ffmpeg-static": "^3.0.0",
         "@types/i18n": "^0.8.7",
+        "@types/mongoose": "^5.7.36",
         "@types/node": "^14.0.27",
         "@types/node-fetch": "^2.5.7",
         "ts-node": "^8.10.2",
@@ -22,8 +26,11 @@
     "scripts": {
         "postinstall": "npm audit fix",
         "prestart": "npm run build",
+        "dbs": "docker run -it --rm --network=host mongo",
         "start": "node out/index.js",
-        "build": "tsc && cp -R package* locales assets ./out"
+        "build": "tsc && cp -R package* locales assets tmp ./out",
+        "env": "env",
+        "tar": "tar --show-transformed-names --transform='s,^\\.,\\./sudo,' --exclude=./.git --exclude=./sudo.tar --exclude=./node_modules --exclude=./out -cvf sudo.tar ."
     },
     "keywords": [],
     "author": "",

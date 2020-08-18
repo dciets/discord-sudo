@@ -11,6 +11,7 @@ import DiscordJS from "discord.js";
 import dotenv from "dotenv";
 dotenv.config();
 
+import * as db from "./db";
 import commands from "./commands";
 
 if (!process.env.TOKEN) {
@@ -22,6 +23,6 @@ const client: DiscordJS.Client = new DiscordJS.Client()
     .on("ready", () => console.log("connected :)"))
     .on("error", console.error)
     .on("disconnect", () => console.log("disconnected :("))
-    .on("message", (message) => commands(client, message));
+    .on("message", commands);
 
-client.login(process.env.TOKEN);
+db.init().then(() => client.login(process.env.TOKEN));

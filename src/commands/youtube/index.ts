@@ -9,6 +9,9 @@ const youtubeV3 = google.youtube({
 
 export default async (message: DiscordJS.Message, ...args: string[]) => {
     if (args.length > 0) {
+        if (!process.env.YOUTUBE_APIKEY)
+            return message.reply("no youtube api key is configured :(");
+
         const response = await youtubeV3.search.list({
             part: ["snippet"],
             maxResults: 1,
