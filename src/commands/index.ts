@@ -8,6 +8,7 @@ import alias from "./alias";
 import bruh from "./bruh";
 import chucknorris from "./chucknorris";
 import fart from "./fart";
+import github from "./github";
 import honk from "./honk";
 import kebac from "./kebac";
 import pick from "./pick";
@@ -35,6 +36,7 @@ export const commands: {
     bruh,
     chucknorris,
     fart,
+    github,
     honk,
     kebac,
     pick,
