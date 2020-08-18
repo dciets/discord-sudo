@@ -4,16 +4,16 @@ services:
     discord_sudo_bot:
         image: discord_sudo
         build: .
-        hostname: discord-sudo
+        hostname: discord_sudo
         environment:
             - "NODE_ENV=production"
-            - "MONGO_DB=mongodb://discord-sudo-mongo:27017/prod"
+            - "MONGO_DB=mongodb://discord_sudo_mongo:27017/prod"
         depends_on:
             - discord_sudo_mongo
 
     discord_sudo_mongo:
         image: mongo
-        hostname: discord-sudo-mongo
+        hostname: discord_sudo_mongo
         volumes:
             - discord_sudo_mongo_data:/data/db
         expose:
