@@ -32,7 +32,7 @@ export const commands: {
     ) => Promise<any>;
 } = {
     _8ball,
-    alias,
+    // alias, // porte à confusion
     bruh,
     chucknorris,
     fart,
@@ -84,7 +84,8 @@ export default async (message: DiscordJS.Message): Promise<any> => {
             message.content
         );
 
-        const al = await aliases.findOne({
+        // on hold, porte a confusion
+        /*const al = await aliases.findOne({
             gid: message.guild.id,
             key: command,
         });
@@ -93,7 +94,7 @@ export default async (message: DiscordJS.Message): Promise<any> => {
             const split = al.val.split(" ");
             command = split[0];
             args = split.slice(1);
-        }
+        }*/
 
         if (commands[command]) {
             i18n.setLocale(message.author.locale || "en");
