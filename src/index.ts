@@ -21,6 +21,7 @@ if (!process.env.TOKEN) {
 
 const client: DiscordJS.Client = new DiscordJS.Client()
     .on("ready", () => console.log("connected :)"))
+    .on("rateLimit", console.warn)
     .on("error", console.error)
     .on("disconnect", () => console.log("disconnected :("))
     .on("message", commands);
