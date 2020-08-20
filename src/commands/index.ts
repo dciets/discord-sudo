@@ -4,17 +4,18 @@ import i18n from "i18n";
 import permissions from "./permissions";
 
 import _8ball from "./8ball";
-import bruh from "./bruh";
 import chucknorris from "./chucknorris";
-import fart from "./fart";
 import github from "./github";
-import honk from "./honk";
 import kebac from "./kebac";
 import pick from "./pick";
 import ping from "./ping";
 import pong from "./pong";
 import roll from "./roll";
 import sb from "./sb";
+import sba from "./sba";
+import sbe from "./sbe";
+import sbl from "./sbl";
+import sbr from "./sbr";
 import surun from "./surun";
 import top from "./top";
 import xkcd from "./xkcd";
@@ -31,17 +32,18 @@ export const commands: {
     ) => Promise<any>;
 } = {
     _8ball,
-    bruh,
     chucknorris,
-    fart,
     github,
-    honk,
     kebac,
     pick,
     ping,
     pong,
     roll,
     sb,
+    sba,
+    sbe,
+    sbl,
+    sbr,
     surun,
     top,
     xkcd,
