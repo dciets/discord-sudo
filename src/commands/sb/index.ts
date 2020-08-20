@@ -252,7 +252,6 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
         const max_nb = sbs.length.toString().length;
         const sbstostr = (page: number) =>
-            Date.now() +
             "\n```nim\n" +
             (sbs
                 .slice(page * PER_PAGE, (page + 1) * PER_PAGE)
