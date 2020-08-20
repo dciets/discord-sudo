@@ -4,7 +4,6 @@ import i18n from "i18n";
 import permissions from "./permissions";
 
 import _8ball from "./8ball";
-import alias from "./alias";
 import bruh from "./bruh";
 import chucknorris from "./chucknorris";
 import fart from "./fart";
@@ -21,7 +20,7 @@ import top from "./top";
 import xkcd from "./xkcd";
 import youtube from "./youtube";
 
-import aliases from "../db/alias";
+import { sleep, lock } from "../util";
 
 const prefix = "sudo ";
 
@@ -32,7 +31,6 @@ export const commands: {
     ) => Promise<any>;
 } = {
     _8ball,
-    // alias, // porte à confusion
     bruh,
     chucknorris,
     fart,
@@ -50,12 +48,15 @@ export const commands: {
     youtube,
 };
 
-export default async (message: DiscordJS.Message): Promise<any> => {
+export default async (message: DiscordJS.Message): Promise<void> => {
     try {
         if (message.author.bot) return;
         if (!message.guild) return;
 
-        if (!permissions(message)) return message.react("🚫");
+        if (!permissions(message)) {
+            await message.react("🚫");
+            return;
+        }
 
         if (message.mentions.everyone) {
             await message.react("🇦");
@@ -64,12 +65,19 @@ export default async (message: DiscordJS.Message): Promise<any> => {
             await message.react("🇪");
             await message.react("🇷");
             await message.react("🇾");
-            return message.react("😡");
+            await message.react("😡");
+            return;
         }
-        if (message.client.user && message.mentions.has(message.client.user))
-            return message.react("👀");
+
+        if (message.client.user && message.mentions.has(message.client.user)) {
+            await message.react("👀");
+            return;
+        }
 
         if (message.content.indexOf(prefix) !== 0) return;
+
+        while (lock.get(message.guild.id)) await sleep(100);
+        lock.set(message.guild.id);
 
         let command = message.content.substr(prefix.length).split(" ")[0];
         if (/^\d/.test(command)) command = "_" + command;
@@ -81,32 +89,25 @@ export default async (message: DiscordJS.Message): Promise<any> => {
         console.log(
             message.member?.displayName,
             message.member?.id,
+            message.guild.id,
             message.content
         );
 
-        // on hold, porte a confusion
-        /*const al = await aliases.findOne({
-            gid: message.guild.id,
-            key: command,
-        });
-
-        if (al) {
-            const split = al.val.split(" ");
-            command = split[0];
-            args = split.slice(1);
-        }*/
-
         if (commands[command]) {
             i18n.setLocale(message.author.locale || "en");
-            return await commands[command](message, ...args);
+            await commands[command](message, ...args);
+        } else {
+            console.log("command not found", command);
+            await message.react("❓");
         }
 
-        console.log("command not found", command);
-        return message.react("❓");
+        lock.del(message.guild.id);
     } catch (e) {
         console.error(e);
         if (process.env.NODE_ENV !== "production")
-            return message.reply(`${e.message}\n\`\`\`${e.stack}\`\`\``);
-        else return message.react("☠️");
+            await message.reply(`${e.message}\n\`\`\`${e.stack}\`\`\``);
+        else await message.react("☠️");
+
+        if (message.guild) lock.del(message.guild.id);
     }
 };

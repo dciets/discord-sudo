@@ -1,4 +1,4 @@
-import { Stream, Writable, Readable } from "stream";
+import DiscordJS from "discord.js";
 
 export const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -32,3 +32,53 @@ export const htmldecode = (str: string) =>
             return String.fromCharCode(parseInt(args[0].substr(1)) || 63);
         else return substr;
     });
+
+export const lock = (() => {
+    const locks: { [key: string]: number } = {};
+    return {
+        get: (gid: string) => locks[gid],
+        set: (gid: string) => (locks[gid] = Date.now()),
+        del: (gid: string) => delete locks[gid],
+    };
+})();
+
+export const paginateMessage = async (
+    message: DiscordJS.Message,
+    userid: string,
+    onreact: (action: "UP" | "TOP" | "DOWN" | "BOTTOM") => Promise<void>
+) => {
+    await message.react("⬆️");
+    await message.react("⏫");
+    await message.react("⬇️");
+    await message.react("⏬");
+
+    try {
+        while (true) {
+            const collected = await message.awaitReactions(
+                (reaction: DiscordJS.MessageReaction, user: DiscordJS.User) =>
+                    ["⬆️", "⬇️", "⏬", "⏫"].includes(reaction.emoji.name) &&
+                    (!userid || user.id === userid),
+                {
+                    max: 1,
+                    time: 60000,
+                    errors: ["time"],
+                }
+            );
+
+            switch (collected.first()?.emoji.name) {
+                case "⬆️":
+                    await onreact("UP");
+                    break;
+                case "⏫":
+                    await onreact("TOP");
+                    break;
+                case "⬇️":
+                    await onreact("DOWN");
+                    break;
+                case "⏬":
+                    await onreact("BOTTOM");
+                    break;
+            }
+        }
+    } catch (e) {}
+};
