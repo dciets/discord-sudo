@@ -9,7 +9,10 @@ import { Readable } from "stream";
 import { waitFor, paginateMessage } from "../../util";
 import soundboard from "../../db/soundboard";
 
-const PER_PAGE = 1;
+const PER_PAGE = Math.min(
+    100,
+    Math.max(20, Number(process.env.PER_PAGE || 20))
+);
 
 export default async (message: DiscordJS.Message, ...args: string[]) => {
     if (/^[A-z0-9]+$/.test(args[0])) {
