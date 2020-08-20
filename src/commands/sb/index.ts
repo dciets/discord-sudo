@@ -39,6 +39,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
             await waitFor(dispatcher, "finish");
 
             message.member?.voice.channel?.leave();
+
             dispatcher.end();
             readable.destroy();
 
@@ -57,6 +58,10 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
                 const connection = await message.member.voice.channel.join();
                 if (!connection) return message.reply("🔇");
+                await waitFor(
+                    connection.play("./assets/audio/silence.mp3"),
+                    "finish"
+                );
 
                 const recorder = connection.receiver.createStream(
                     message.author,
@@ -75,7 +80,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
                         "-t",
                         "10",
                         "-i",
-                        "-",
+                        "pipe:0",
                         "-f",
                         "mp3",
                         "pipe:1",
@@ -110,7 +115,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
                     val: buf,
                 }).save();
 
-                await message.member?.voice.channel?.leave();
+                message.member?.voice.channel?.leave();
 
                 return message.react("👍");
             } else if (args[1] === "here") {
@@ -118,6 +123,10 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
                 const connection = await message.member.voice.channel.join();
                 if (!connection) return message.reply("🔇");
+                await waitFor(
+                    connection.play("./assets/audio/silence.mp3"),
+                    "finish"
+                );
 
                 const recorders: Promise<
                     string
@@ -187,7 +196,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
                     val: buf,
                 }).save();
 
-                await message.member?.voice.channel?.leave();
+                message.member?.voice.channel?.leave();
 
                 return message.react("👍");
             } else {
@@ -201,7 +210,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
                     ffmpeg_static,
                     [
                         "-i",
-                        "-",
+                        "pipe:0",
                         "-codec:a",
                         "libmp3lame",
                         "-qscale:a",
@@ -248,7 +257,10 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
     }
 
     if (args.length === 0) {
-        const sbs = await soundboard.find({ gid: message.guild?.id });
+        const sbs = await soundboard
+            .find({ gid: message.guild?.id })
+            .select("-val")
+            .sort("key");
 
         const max_nb = sbs.length.toString().length;
         const sbstostr = (page: number) =>
