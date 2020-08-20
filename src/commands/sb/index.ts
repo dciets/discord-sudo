@@ -15,7 +15,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
         key: args[0],
     });
 
-    if (!file) return message.reply("file not found");
+    if (!file) return message.reply("sound not found");
 
     const readable = new Readable({
         read() {

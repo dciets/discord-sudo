@@ -19,9 +19,13 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
                 .fill(0)
                 .map(() => random.range(1, d));
             const total = rolls.reduce((a, b) => a + b, 0);
-            return message.reply(
-                __mf("rolled a %s", `(${rolls.join("+")})=${total}`)
-            );
+            return message
+                .reply(__mf("rolled a %s", `(${rolls.join("+")})=${total}`))
+                .catch(() =>
+                    message.reply(
+                        __mf("rolled a %s", `(too many rolls)=${total}`)
+                    )
+                );
         }
     } else if (args.every((arg) => /^(\d+|\d+d\d+)$/.test(arg))) {
         const rolls = (
@@ -41,14 +45,18 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
             0
         );
 
-        return message.reply(
-            __mf(
-                "rolled a %s",
-                `(${rolls
-                    .map((roll) => "(" + roll.join("+") + ")")
-                    .join("+")})=${total}`
+        return message
+            .reply(
+                __mf(
+                    "rolled a %s",
+                    `(${rolls
+                        .map((roll) => "(" + roll.join("+") + ")")
+                        .join("+")})=${total}`
+                )
             )
-        );
+            .catch(() =>
+                message.reply(__mf("rolled a %s", `(too many rolls)=${total}`))
+            );
     }
 
     return message.reply("roll [\\d|\\dd\\d]+?");

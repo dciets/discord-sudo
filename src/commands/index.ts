@@ -6,7 +6,9 @@ import permissions from "./permissions";
 import _8ball from "./8ball";
 import chucknorris from "./chucknorris";
 import github from "./github";
+import help from "./help";
 import kebac from "./kebac";
+import list from "./list";
 import pick from "./pick";
 import ping from "./ping";
 import pong from "./pong";
@@ -34,7 +36,9 @@ export const commands: {
     _8ball,
     chucknorris,
     github,
+    help,
     kebac,
+    list,
     pick,
     ping,
     pong,
