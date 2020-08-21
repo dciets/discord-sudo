@@ -8,7 +8,7 @@ import sbl from "../sbl";
 export default async (message: DiscordJS.Message, ...args: string[]) => {
     if (!args[0]) return await sbl(message, ...args);
 
-    if (!message.member?.voice.channel) return message.reply("🔇");
+    if (!message.member?.voice.channel) return message.react("🔇");
 
     for (let arg of args.slice(0, 10)) {
         const file = await soundboard.findOne({
@@ -26,6 +26,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
         });
 
         const connection = await message.member.voice.channel.join();
+        if (!connection) return message.react("🔇");
         const dispatcher = connection.play(readable);
 
         await waitFor(dispatcher, "finish");

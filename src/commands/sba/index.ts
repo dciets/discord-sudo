@@ -22,10 +22,10 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
     if (sb) return message.reply("sound already exists");
 
     if (args[1] === "me") {
-        if (!message.member?.voice.channel) return message.reply("🔇");
+        if (!message.member?.voice.channel) return message.react("🔇");
 
         const connection = await message.member.voice.channel.join();
-        if (!connection) return message.reply("🔇");
+        if (!connection) return message.react("🔇");
         await waitFor(connection.play("./assets/audio/silence.mp3"), "finish");
 
         const recorder = connection.receiver.createStream(message.author, {
