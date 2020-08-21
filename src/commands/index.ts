@@ -59,11 +59,6 @@ export default async (message: DiscordJS.Message): Promise<void> => {
         if (message.author.bot) return;
         if (!message.guild) return;
 
-        if (!permissions(message)) {
-            await message.react("🚫");
-            return;
-        }
-
         if (message.mentions.everyone) {
             await message.react("🇦");
             await message.react("🇳");
@@ -81,6 +76,10 @@ export default async (message: DiscordJS.Message): Promise<void> => {
         }
 
         if (message.content.indexOf(prefix) !== 0) return;
+        if (!permissions(message)) {
+            await message.react("🚫");
+            return;
+        }
 
         while (lock.get(message.guild.id)) await sleep(100);
         lock.set(message.guild.id);

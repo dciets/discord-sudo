@@ -10,29 +10,29 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
     if (!message.member?.voice.channel) return message.reply("🔇");
 
-    const file = await soundboard.findOne({
-        gid: message.guild?.id,
-        key: args[0],
-    });
+    for (let arg of args.slice(0, 10)) {
+        const file = await soundboard.findOne({
+            gid: message.guild?.id,
+            key: arg,
+        });
 
-    if (!file) return message.reply("sound not found");
+        if (!file) return message.reply("sound not found");
 
-    const readable = new Readable({
-        read() {
-            this.push(file.val);
-            this.push(null);
-        },
-    });
+        const readable = new Readable({
+            read() {
+                this.push(file.val);
+                this.push(null);
+            },
+        });
 
-    const connection = await message.member.voice.channel.join();
-    const dispatcher = connection.play(readable);
+        const connection = await message.member.voice.channel.join();
+        const dispatcher = connection.play(readable);
 
-    await waitFor(dispatcher, "finish");
+        await waitFor(dispatcher, "finish");
 
-    message.member?.voice.channel?.leave();
-
-    dispatcher.end();
-    readable.destroy();
+        dispatcher.end();
+        readable.destroy();
+    }
 
     return message.react("👍");
 };

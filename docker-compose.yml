@@ -15,11 +15,8 @@ services:
         image: mongo
         hostname: discord_sudo_mongo
         volumes:
-            - discord_sudo_mongo_data:/data/db
+            - ./data:/data/db
         expose:
             - "27017"
         ports:
             - "27017:27017"
-
-volumes:
-    discord_sudo_mongo_data:

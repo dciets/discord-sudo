@@ -1,6 +1,8 @@
 /.env
 /docker-compose.override.yml
 
+/data/*
+!/data/.gitkeep
 /tmp/*
 !/tmp/.gitkeep
 /sudo.tar

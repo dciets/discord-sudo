@@ -7,7 +7,7 @@ import ffmpeg_static from "ffmpeg-static";
 
 import soundboard from "../../db/soundboard";
 
-import { waitFor, paginateMessage } from "../../util";
+import { waitFor } from "../../util";
 
 export default async (message: DiscordJS.Message, ...args: string[]) => {
     if (!args[0] || !args[1]) return message.reply("sba key [me|here|url]");
@@ -76,8 +76,6 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
             key: args[0],
             val: buf,
         }).save();
-
-        message.member?.voice.channel?.leave();
 
         return message.react("👍");
     } else if (args[1] === "here") {
@@ -152,14 +150,13 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
             val: buf,
         }).save();
 
-        message.member?.voice.channel?.leave();
-
         return message.react("👍");
     } else {
         const stream = await fetch(args[1], {
             headers: {
                 "User-Agent": "sudo",
             },
+            timeout: 5000,
         }).then((r) => r.body);
 
         const ffmpeg = spawn(
@@ -188,7 +185,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
             }
         );
 
-        stream.pipe(ffmpeg.stdin);
+        stream.pipe(ffmpeg.stdin).once("error", console.error);
 
         const bufs: Buffer[] = [];
         ffmpeg.stdout.on("data", (b) => bufs.push(b));
