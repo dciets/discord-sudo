@@ -34,11 +34,19 @@ export const htmldecode = (str: string) =>
     });
 
 export const lock = (() => {
-    const locks: { [key: string]: number } = {};
+    const locks: { [key: string]: number[] } = {};
     return {
-        get: (gid: string) => locks[gid],
-        set: (gid: string) => (locks[gid] = Date.now()),
-        del: (gid: string) => delete locks[gid],
+        wait: async (gid: string) => {
+            if (!locks[gid]) locks[gid] = [];
+            const key = Date.now();
+            locks[gid].push(key);
+
+            while (locks[gid][0] !== key) await sleep(100);
+        },
+        free: (gid: string) => {
+            if (!locks[gid]) throw new Error("uhhh?");
+            locks[gid].shift();
+        },
     };
 })();
 

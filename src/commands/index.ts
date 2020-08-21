@@ -56,10 +56,8 @@ export const commands: {
 
 export default async (message: DiscordJS.Message): Promise<void> => {
     try {
-        if (message.author.bot) return;
-        if (!message.guild) return;
-
-        if (message.mentions.everyone) {
+        if (message.author.bot || !message.guild) return;
+        else if (message.mentions.everyone) {
             await message.react("🇦");
             await message.react("🇳");
             await message.react("🇬");
@@ -68,9 +66,10 @@ export default async (message: DiscordJS.Message): Promise<void> => {
             await message.react("🇾");
             await message.react("😡");
             return;
-        }
-
-        if (message.client.user && message.mentions.has(message.client.user)) {
+        } else if (
+            message.client.user &&
+            message.mentions.has(message.client.user)
+        ) {
             await message.react("👀");
             return;
         }
@@ -81,8 +80,7 @@ export default async (message: DiscordJS.Message): Promise<void> => {
             return;
         }
 
-        while (lock.get(message.guild.id)) await sleep(100);
-        lock.set(message.guild.id);
+        await lock.wait(message.guild.id);
 
         let command = message.content.substr(prefix.length).split(" ")[0];
         if (/^\d/.test(command)) command = "_" + command;
@@ -105,14 +103,12 @@ export default async (message: DiscordJS.Message): Promise<void> => {
             console.log("command not found", command);
             await message.react("❓");
         }
-
-        lock.del(message.guild.id);
     } catch (e) {
         console.error(e);
         if (process.env.NODE_ENV !== "production")
             await message.reply(`${e.message}\n\`\`\`${e.stack}\`\`\``);
         else await message.react("☠️");
-
-        if (message.guild) lock.del(message.guild.id);
+    } finally {
+        if (message.guild) lock.free(message.guild.id);
     }
 };
