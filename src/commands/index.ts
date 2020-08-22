@@ -4,11 +4,15 @@ import i18n from "i18n";
 import permissions from "./permissions";
 
 import _8ball from "./8ball";
+import catbomb from "./catbomb";
+import catme from "./catme";
+import catwith from "./catwith";
 import chucknorris from "./chucknorris";
 import github from "./github";
 import help from "./help";
 import kebac from "./kebac";
 import list from "./list";
+import owo from "./owo";
 import pick from "./pick";
 import ping from "./ping";
 import pong from "./pong";
@@ -23,7 +27,7 @@ import top from "./top";
 import xkcd from "./xkcd";
 import youtube from "./youtube";
 
-import { sleep, lock } from "../util";
+import { lock, autodisconnect } from "../util";
 
 const prefix = "sudo ";
 
@@ -34,11 +38,15 @@ export const commands: {
     ) => Promise<any>;
 } = {
     _8ball,
+    catbomb,
+    catme,
+    catwith,
     chucknorris,
     github,
     help,
     kebac,
     list,
+    owo,
     pick,
     ping,
     pong,
@@ -103,6 +111,8 @@ export default async (message: DiscordJS.Message): Promise<void> => {
             console.log("command not found", command);
             await message.react("❓");
         }
+
+        autodisconnect(message.guild.id, message);
     } catch (e) {
         console.error(e);
         if (process.env.NODE_ENV !== "production")

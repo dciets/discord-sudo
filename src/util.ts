@@ -90,3 +90,21 @@ export const paginateMessage = async (
         }
     } catch (e) {}
 };
+
+export const autodisconnect = (() => {
+    const timeout = Number(process.env.AUTO_DISCONNECT || "300000");
+    const locks: { [key: string]: NodeJS.Timeout } = {};
+
+    return (gid: string, message: DiscordJS.Message) => {
+        const disconnect = () => {
+            if (message.guild?.me?.voice)
+                message.guild?.me.voice.channel?.leave();
+        };
+
+        if (!locks[gid]) locks[gid] = setTimeout(disconnect, timeout);
+        else {
+            clearTimeout(locks[gid]);
+            locks[gid] = setTimeout(disconnect, timeout);
+        }
+    };
+})();
