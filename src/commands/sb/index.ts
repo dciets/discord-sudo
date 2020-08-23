@@ -9,6 +9,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
     if (!args[0]) return await sbl(message, ...args);
 
     if (!message.member?.voice.channel) return message.react("🔇");
+    const channel = message.member?.voice.channel;
 
     for (let arg of args.slice(0, 10)) {
         const file = await soundboard.findOne({
@@ -25,7 +26,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
             },
         });
 
-        const connection = await message.member.voice.channel.join();
+        const connection = await channel.join();
         if (!connection) return message.react("🔇");
         autodisconnect(message);
         const dispatcher = connection.play(readable);

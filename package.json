@@ -24,6 +24,7 @@
         "typescript": "^3.9.7"
     },
     "scripts": {
+        "docker": "docker-compose build && docker-compose down && docker-compose up -d && docker-compose logs -f",
         "postinstall": "npm audit fix",
         "prestart": "npm run build",
         "dbs": "docker run -it --rm --network=host mongo",

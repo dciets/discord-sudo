@@ -10,7 +10,7 @@ const PER_PAGE = Math.min(
 
 export default async (message: DiscordJS.Message, ...args: string[]) => {
     const sbs = await soundboard
-        .find({ gid: message.guild?.id })
+        .find({ gid: message.guild?.id, key: { $regex: args[0] || "" } })
         .select("-val")
         .sort("key");
 

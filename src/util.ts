@@ -78,7 +78,10 @@ export const paginateMessage = async (
                 }
             );
 
-            switch (collected.first()?.emoji.name) {
+            const first = collected.first();
+            if (!first) continue;
+
+            switch (first.emoji.name) {
                 case "⬆️":
                     await onreact("UP");
                     break;
@@ -92,6 +95,8 @@ export const paginateMessage = async (
                     await onreact("BOTTOM");
                     break;
             }
+
+            await first.users.remove(userid);
         }
     } catch (e) {}
 };
