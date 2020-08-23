@@ -8,33 +8,38 @@ export const waitFor = (
     event: string
 ) => new Promise((resolve) => stream.once(event, resolve));
 
-const htmlentities: any = {
-    nbsp: " ",
-    cent: "¢",
-    pound: "£",
-    yen: "¥",
-    euro: "€",
-    copy: "©",
-    reg: "®",
-    lt: "<",
-    gt: ">",
-    quot: '"',
-    amp: "&",
-    apos: "'",
-};
+export const htmldecode = (() => {
+    const htmlentities: any = {
+        nbsp: " ",
+        cent: "¢",
+        pound: "£",
+        yen: "¥",
+        euro: "€",
+        copy: "©",
+        reg: "®",
+        lt: "<",
+        gt: ">",
+        quot: '"',
+        amp: "&",
+        apos: "'",
+    };
 
-export const htmldecode = (str: string) =>
-    str.replace(/&(.+?);/g, (substr: string, ...args: string[]) => {
-        if (htmlentities[args[0]]) return htmlentities[args[0]];
-        else if (args[0].indexOf("#x") === 0)
-            return String.fromCharCode(parseInt(args[0].substr(2), 16) || 63);
-        else if (args[0].indexOf("#") === 0)
-            return String.fromCharCode(parseInt(args[0].substr(1)) || 63);
-        else return substr;
-    });
+    return (str: string) =>
+        str.replace(/&(.+?);/g, (substr: string, ...args: string[]) => {
+            if (htmlentities[args[0]]) return htmlentities[args[0]];
+            else if (args[0].indexOf("#x") === 0)
+                return String.fromCharCode(
+                    parseInt(args[0].substr(2), 16) || 63
+                );
+            else if (args[0].indexOf("#") === 0)
+                return String.fromCharCode(parseInt(args[0].substr(1)) || 63);
+            else return substr;
+        });
+})();
 
 export const lock = (() => {
     const locks: { [key: string]: number[] } = {};
+
     return {
         wait: async (gid: string) => {
             if (!locks[gid]) locks[gid] = [];
@@ -95,16 +100,18 @@ export const autodisconnect = (() => {
     const timeout = Number(process.env.AUTO_DISCONNECT || "300000");
     const locks: { [key: string]: NodeJS.Timeout } = {};
 
-    return (gid: string, message: DiscordJS.Message) => {
+    return (message: DiscordJS.Message) => {
         const disconnect = () => {
             if (message.guild?.me?.voice)
                 message.guild?.me.voice.channel?.leave();
         };
 
-        if (!locks[gid]) locks[gid] = setTimeout(disconnect, timeout);
+        if (!message.guild) return;
+        if (!locks[message.guild.id])
+            locks[message.guild.id] = setTimeout(disconnect, timeout);
         else {
-            clearTimeout(locks[gid]);
-            locks[gid] = setTimeout(disconnect, timeout);
+            clearTimeout(locks[message.guild.id]);
+            locks[message.guild.id] = setTimeout(disconnect, timeout);
         }
     };
 })();

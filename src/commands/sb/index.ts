@@ -1,7 +1,7 @@
 import DiscordJS from "discord.js";
 import { Readable } from "stream";
 
-import { waitFor } from "../../util";
+import { waitFor, autodisconnect } from "../../util";
 import soundboard from "../../db/soundboard";
 import sbl from "../sbl";
 
@@ -27,6 +27,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
         const connection = await message.member.voice.channel.join();
         if (!connection) return message.react("🔇");
+        autodisconnect(message);
         const dispatcher = connection.play(readable);
 
         await waitFor(dispatcher, "finish");

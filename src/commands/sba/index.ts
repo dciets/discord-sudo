@@ -7,7 +7,7 @@ import ffmpeg_static from "ffmpeg-static";
 
 import soundboard from "../../db/soundboard";
 
-import { waitFor } from "../../util";
+import { waitFor, autodisconnect } from "../../util";
 
 export default async (message: DiscordJS.Message, ...args: string[]) => {
     if (!args[0] || !args[1]) return message.reply("sba key [me|here|url]");
@@ -26,6 +26,7 @@ export default async (message: DiscordJS.Message, ...args: string[]) => {
 
         const connection = await message.member.voice.channel.join();
         if (!connection) return message.react("🔇");
+        autodisconnect(message);
         await waitFor(connection.play("./assets/audio/silence.mp3"), "finish");
 
         const recorder = connection.receiver.createStream(message.author, {

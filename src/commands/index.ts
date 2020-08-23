@@ -27,7 +27,7 @@ import top from "./top";
 import xkcd from "./xkcd";
 import youtube from "./youtube";
 
-import { lock, autodisconnect } from "../util";
+import { lock } from "../util";
 
 const prefix = "sudo ";
 
@@ -63,31 +63,31 @@ export const commands: {
 };
 
 export default async (message: DiscordJS.Message): Promise<void> => {
+    if (message.author.bot || !message.guild) return;
+    else if (message.mentions.everyone) {
+        await message.react("🇦");
+        await message.react("🇳");
+        await message.react("🇬");
+        await message.react("🇪");
+        await message.react("🇷");
+        await message.react("🇾");
+        await message.react("😡");
+        return;
+    } else if (
+        message.client.user &&
+        message.mentions.has(message.client.user)
+    ) {
+        await message.react("👀");
+        return;
+    }
+
+    if (message.content.indexOf(prefix) !== 0) return;
+    if (!permissions(message)) {
+        await message.react("🚫");
+        return;
+    }
+
     try {
-        if (message.author.bot || !message.guild) return;
-        else if (message.mentions.everyone) {
-            await message.react("🇦");
-            await message.react("🇳");
-            await message.react("🇬");
-            await message.react("🇪");
-            await message.react("🇷");
-            await message.react("🇾");
-            await message.react("😡");
-            return;
-        } else if (
-            message.client.user &&
-            message.mentions.has(message.client.user)
-        ) {
-            await message.react("👀");
-            return;
-        }
-
-        if (message.content.indexOf(prefix) !== 0) return;
-        if (!permissions(message)) {
-            await message.react("🚫");
-            return;
-        }
-
         await lock.wait(message.guild.id);
 
         let command = message.content.substr(prefix.length).split(" ")[0];
@@ -111,14 +111,12 @@ export default async (message: DiscordJS.Message): Promise<void> => {
             console.log("command not found", command);
             await message.react("❓");
         }
-
-        autodisconnect(message.guild.id, message);
     } catch (e) {
         console.error(e);
         if (process.env.NODE_ENV !== "production")
             await message.reply(`${e.message}\n\`\`\`${e.stack}\`\`\``);
         else await message.react("☠️");
     } finally {
-        if (message.guild) lock.free(message.guild.id);
+        lock.free(message.guild.id);
     }
 };
