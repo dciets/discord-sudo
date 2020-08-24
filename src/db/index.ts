@@ -8,6 +8,7 @@ export const init = () =>
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
+            authSource: "admin",
         })
         .then(async () => {
             while (mongoose.connection.readyState !== 1) await sleep(10);

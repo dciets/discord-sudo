@@ -5,7 +5,6 @@
     "main": "index.js",
     "dependencies": {
         "@discordjs/opus": "^0.3.2",
-        "@zuzak/owo": "^1.11.0",
         "discord.js": "^12.3.1",
         "dotenv": "^8.2.0",
         "ffmpeg-static": "^4.2.7",
@@ -31,7 +30,6 @@
         "dbs": "docker run -it --rm --network=host mongo",
         "start": "node out/index.js",
         "build": "tsc && cp -R package* locales assets tmp ./out",
-        "env": "env",
         "tar": "tar --show-transformed-names --transform='s,^.,./sudo,' --exclude=./data --exclude=./.git --exclude=./sudo.tar --exclude=./node_modules --exclude=./out -cvf sudo.tar ."
     },
     "keywords": [],
