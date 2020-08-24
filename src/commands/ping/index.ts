@@ -1,5 +1,13 @@
 import DiscordJS from "discord.js";
 
-export default async (message: DiscordJS.Message, ...args: string[]) => {
-    return message.reply(`pong! +${Date.now() - message.createdTimestamp}ms`);
-};
+import Command from "../command";
+
+class Ping extends Command {
+    public async execute(message: DiscordJS.Message, ...args: string[]) {
+        return message.reply(
+            `pong! +${Date.now() - message.createdTimestamp}ms`
+        );
+    }
+}
+
+export default new Ping(["ping"]);

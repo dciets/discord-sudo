@@ -2,6 +2,7 @@ import DiscordJS from "discord.js";
 import fetch from "node-fetch";
 
 import { htmldecode } from "../../util";
+import Command from "../command";
 
 const icndb = (nb: number) =>
     fetch(`https://api.icndb.com/jokes/${nb === -1 ? "random" : nb}`)
@@ -9,8 +10,13 @@ const icndb = (nb: number) =>
         .then((json) => json?.value?.joke)
         .then((joke) => (joke ? htmldecode(joke) : null));
 
-export default async (message: DiscordJS.Message, ...args: string[]) => {
-    return message.reply(
-        (await icndb(!isNaN(+args[0]) ? Number(args[0]) : -1)) || "not found"
-    );
-};
+class ChuckNorris extends Command {
+    public async execute(message: DiscordJS.Message, ...args: string[]) {
+        return message.reply(
+            (await icndb(!isNaN(+args[0]) ? Number(args[0]) : -1)) ||
+                "not found"
+        );
+    }
+}
+
+export default new ChuckNorris(["chucknorris", "cn"]);

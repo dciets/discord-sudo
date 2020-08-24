@@ -1,10 +1,22 @@
 import DiscordJS from "discord.js";
 
-import { commands } from "../";
+import manager from "..";
+import Command from "../command";
 
-export default async (message: DiscordJS.Message, ...args: string[]) => {
-    const cmds = [];
-    for (let command in commands)
-        cmds.push(command[0] === "_" ? command.slice(1) : command);
-    return message.reply(`\`\`\`\n${cmds.join("\n")}\`\`\``);
-};
+class List extends Command {
+    public async execute(message: DiscordJS.Message, ...args: string[]) {
+        const cmdset = new Set();
+        const cmds = [];
+
+        for (let cmdname in manager.commands) {
+            if (!cmdset.has(manager.commands[cmdname])) {
+                cmds.push(cmdname);
+                cmdset.add(manager.commands[cmdname]);
+            }
+        }
+
+        return message.reply(`\`\`\`\n${cmds.join("\n")}\`\`\``);
+    }
+}
+
+export default new List(["list"]);

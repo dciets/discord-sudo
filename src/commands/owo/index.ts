@@ -1,7 +1,13 @@
 import DiscordJS from "discord.js";
 
-import owo from "@zuzak/owo";
+import owoify from "owoify-js";
 
-export default async (message: DiscordJS.Message, ...args: string[]) => {
-    return message.reply(owo(args.join(" ")));
-};
+import Command from "../command";
+
+class OwO extends Command {
+    public async execute(message: DiscordJS.Message, ...args: string[]) {
+        return message.reply(owoify(args.join(" "), "owo"));
+    }
+}
+
+export default new OwO(["owo", "uwu"]);

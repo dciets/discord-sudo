@@ -26,6 +26,8 @@ const client: DiscordJS.Client = new DiscordJS.Client()
     )
     .on("error", (err: Error) => console.error("error", err))
     .on("disconnect", () => console.log("disconnected :("))
-    .on("message", commands);
+    .on("message", (message: DiscordJS.Message) => commands.execute(message));
 
-db.init().then(() => client.login(process.env.TOKEN));
+Promise.all([db.init(), commands.init()]).then(() =>
+    client.login(process.env.TOKEN)
+);

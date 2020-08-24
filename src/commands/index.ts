@@ -1,122 +1,91 @@
 import DiscordJS from "discord.js";
 import i18n from "i18n";
 
+import Command from "./command";
 import permissions from "./permissions";
-
-import _8ball from "./8ball";
-import catbomb from "./catbomb";
-import catme from "./catme";
-import catwith from "./catwith";
-import chucknorris from "./chucknorris";
-import github from "./github";
-import help from "./help";
-import kebac from "./kebac";
-import list from "./list";
-import owo from "./owo";
-import pick from "./pick";
-import ping from "./ping";
-import pong from "./pong";
-import roll from "./roll";
-import sb from "./sb";
-import sba from "./sba";
-import sbe from "./sbe";
-import sbl from "./sbl";
-import sbr from "./sbr";
-import surun from "./surun";
-import top from "./top";
-import xkcd from "./xkcd";
-import youtube from "./youtube";
+import init from "./init";
 
 import { lock } from "../util";
 
 const prefix = "sudo ";
 
-export const commands: {
-    [key: string]: (
-        message: DiscordJS.Message,
-        ...args: string[]
-    ) => Promise<any>;
-} = {
-    _8ball,
-    catbomb,
-    catme,
-    catwith,
-    chucknorris,
-    github,
-    help,
-    kebac,
-    list,
-    owo,
-    pick,
-    ping,
-    pong,
-    roll,
-    sb,
-    sba,
-    sbe,
-    sbl,
-    sbr,
-    surun,
-    top,
-    xkcd,
-    youtube,
-};
+class Manager {
+    private _commands: { [key: string]: Command } = {};
 
-export default async (message: DiscordJS.Message): Promise<void> => {
-    if (message.author.bot || !message.guild) return;
-    else if (message.mentions.everyone) {
-        await message.react("🇦");
-        await message.react("🇳");
-        await message.react("🇬");
-        await message.react("🇪");
-        await message.react("🇷");
-        await message.react("🇾");
-        await message.react("😡");
-        return;
-    } else if (
-        message.client.user &&
-        message.mentions.has(message.client.user)
-    ) {
-        await message.react("👀");
-        return;
+    public async init() {
+        return await init();
     }
 
-    if (message.content.indexOf(prefix) !== 0) return;
-    if (!permissions(message)) {
-        await message.react("🚫");
-        return;
-    }
+    public register(prefixes: string[], command: Command) {
+        if (prefixes.length === 0)
+            throw new Error("Please register at least 1 prefix for a command");
 
-    try {
-        await lock.wait(message.guild.id);
-
-        let command = message.content.substr(prefix.length).split(" ")[0];
-        if (/^\d/.test(command)) command = "_" + command;
-        let args: string[] = message.content
-            .substr(prefix.length)
-            .split(" ")
-            .slice(1);
-
-        console.log(
-            message.member?.displayName,
-            message.member?.id,
-            message.guild.id,
-            message.content
-        );
-
-        if (commands[command]) {
-            i18n.setLocale(message.author.locale || "en");
-            await commands[command](message, ...args);
-        } else {
-            console.log("command not found", command);
-            await message.react("❓");
+        for (let prefix of prefixes) {
+            if (this._commands[prefix])
+                throw new Error("Command already registered");
+            this._commands[prefix] = command;
         }
-    } catch (e) {
-        console.error(e);
-        if (process.env.NODE_ENV !== "production")
-            await message.reply(`${e.message}\n\`\`\`${e.stack}\`\`\``);
-        else await message.react("☠️");
-    } finally {
-        lock.free(message.guild.id);
     }
-};
+
+    public async execute(message: DiscordJS.Message): Promise<void> {
+        if (message.author.bot || !message.guild) return;
+        else if (
+            message.client.user &&
+            message.mentions.has(message.client.user)
+        ) {
+            await message.react("👀");
+            return;
+        }
+
+        if (message.content.indexOf(prefix) !== 0) return;
+        if (!permissions(message)) {
+            await message.react("🚫");
+            return;
+        }
+
+        try {
+            await lock.wait(message.guild.id);
+            let command = message.content.substr(prefix.length).split(" ")[0];
+            const args: string[] = message.content
+                .substr(prefix.length)
+                .split(" ")
+                .slice(1);
+
+            console.log(
+                message.member?.displayName,
+                message.member?.id,
+                message.guild.id,
+                message.content
+            );
+
+            while (true) {
+                if (this._commands[command]) {
+                    i18n.setLocale(message.author.locale || "en");
+                    this._commands[command].execute(message, ...args);
+                    return;
+                }
+
+                if (args.length === 0) {
+                    console.log("command not found", command);
+                    await message.react("❓");
+                    return;
+                }
+
+                command += " " + args.shift();
+            }
+        } catch (e) {
+            console.error(e);
+            if (process.env.NODE_ENV !== "production")
+                await message.reply(`${e.message}\n\`\`\`${e.stack}\`\`\``);
+            else await message.react("☠️");
+        } finally {
+            lock.free(message.guild.id);
+        }
+    }
+
+    public get commands() {
+        return this._commands;
+    }
+}
+
+export default new Manager();
