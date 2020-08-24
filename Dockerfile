@@ -4,9 +4,10 @@ RUN mkdir /app && chown node:node /app
 WORKDIR /app
 USER node
 
-COPY --chown=node:node . /app
-
+COPY --chown=node:node ./package* /app/
 RUN npm i
+
+COPY --chown=node:node . /app
 RUN npm run build
 
 FROM node:erbium
