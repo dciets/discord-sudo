@@ -32,7 +32,7 @@
         "start": "node out/index.js",
         "build": "tsc && cp -R package* locales assets tmp ./out",
         "env": "env",
-        "tar": "tar --show-transformed-names --transform='s,^.,./sudo,' --exclude=./.git --exclude=./sudo.tar --exclude=./node_modules --exclude=./out -cvf sudo.tar ."
+        "tar": "tar --show-transformed-names --transform='s,^.,./sudo,' --exclude=./data --exclude=./.git --exclude=./sudo.tar --exclude=./node_modules --exclude=./out -cvf sudo.tar ."
     },
     "keywords": [],
     "author": "",

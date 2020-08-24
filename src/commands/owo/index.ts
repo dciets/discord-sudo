@@ -6,7 +6,7 @@ import Command from "../command";
 
 class OwO extends Command {
     public async execute(message: DiscordJS.Message, ...args: string[]) {
-        return message.reply(owoify(args.join(" "), "owo"));
+        return message.reply((owoify as any).default(args.join(" "), "owo"));
     }
 }
 

@@ -18,7 +18,8 @@ WORKDIR /app
 USER node
 
 COPY --chown=node:node --from=build /app/out /app
+COPY --chown=node:node --from=build /app/node_modules /app/node_modules
 
-RUN npm i
+RUN npm prune
 
 ENTRYPOINT [ "node", "/app/index.js" ]

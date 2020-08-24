@@ -61,7 +61,7 @@ class Manager {
             while (true) {
                 if (this._commands[command]) {
                     i18n.setLocale(message.author.locale || "en");
-                    this._commands[command].execute(message, ...args);
+                    await this._commands[command].execute(message, ...args);
                     return;
                 }
 
