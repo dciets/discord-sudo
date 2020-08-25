@@ -29,7 +29,10 @@
         "prestart": "npm run build",
         "dbs": "docker run -it --rm --network=host mongo",
         "start": "node out/index.js",
-        "build": "tsc && cp -R package* locales assets tmp ./out",
+        "clean": "rm -rf ./out || true",
+        "prebuild": "npm run clean",
+        "build": "tsc",
+        "postbuild": "cp -R package* locales assets tmp ./out",
         "tar": "tar --show-transformed-names --transform='s,^.,./sudo,' --exclude=./data --exclude=./.git --exclude=./sudo.tar --exclude=./node_modules --exclude=./out -cvf sudo.tar ."
     },
     "keywords": [],

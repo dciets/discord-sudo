@@ -1,7 +1,7 @@
 import DiscordJS from "discord.js";
 
-import soundboard from "../../db/soundboard";
-import Command from "../command";
+import soundboard from "../../../db/soundboard";
+import Command from "../../command";
 
 class SoundboardRemove extends Command {
     public async execute(message: DiscordJS.Message, ...args: string[]) {

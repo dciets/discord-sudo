@@ -1,10 +1,10 @@
 import DiscordJS from "discord.js";
 import { Readable } from "stream";
 
-import { waitFor, autodisconnect } from "../../util";
-import soundboard from "../../db/soundboard";
+import { waitFor, autodisconnect } from "../../../util";
+import soundboard from "../../../db/soundboard";
 import sbl from "../sbl";
-import Command from "../command";
+import Command from "../../command";
 
 class Soundboard extends Command {
     public async execute(message: DiscordJS.Message, ...args: string[]) {

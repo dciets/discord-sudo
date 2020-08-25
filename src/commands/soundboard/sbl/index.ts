@@ -1,8 +1,8 @@
 import DiscordJS from "discord.js";
 
-import soundboard from "../../db/soundboard";
-import { paginateMessage } from "../../util";
-import Command from "../command";
+import soundboard from "../../../db/soundboard";
+import { paginateMessage } from "../../../util";
+import Command from "../../command";
 
 const PER_PAGE = Math.min(
     100,
@@ -32,7 +32,7 @@ class SoundboardList extends Command {
                 .join("\n") || "(no soundboards added)") +
             "```";
 
-        const mess = await message.channel.send(sbstostr(0));
+        const mess = await message.reply(sbstostr(0));
 
         if (sbs.length > PER_PAGE) {
             let page = 0;

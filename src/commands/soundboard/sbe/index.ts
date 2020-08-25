@@ -1,8 +1,8 @@
 import DiscordJS from "discord.js";
 
-import soundboard from "../../db/soundboard";
+import soundboard from "../../../db/soundboard";
 import sba from "../sba";
-import Command from "../command";
+import Command from "../../command";
 
 class SoundboardEdit extends Command {
     public async execute(message: DiscordJS.Message, ...args: string[]) {

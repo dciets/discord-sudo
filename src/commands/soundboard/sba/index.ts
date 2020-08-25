@@ -5,10 +5,10 @@ import fs from "fs";
 import { spawn } from "child_process";
 import ffmpeg_static from "ffmpeg-static";
 
-import soundboard from "../../db/soundboard";
+import soundboard from "../../../db/soundboard";
 
-import { waitFor, autodisconnect } from "../../util";
-import Command from "../command";
+import { waitFor, autodisconnect } from "../../../util";
+import Command from "../../command";
 
 class SoundboardAdd extends Command {
     public async execute(message: DiscordJS.Message, ...args: string[]) {

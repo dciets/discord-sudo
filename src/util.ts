@@ -70,7 +70,7 @@ export const paginateMessage = async (
             const collected = await message.awaitReactions(
                 (reaction: DiscordJS.MessageReaction, user: DiscordJS.User) =>
                     ["⬆️", "⬇️", "⏬", "⏫"].includes(reaction.emoji.name) &&
-                    (!userid || user.id === userid),
+                    user.id === userid,
                 {
                     max: 1,
                     time: 60000,
