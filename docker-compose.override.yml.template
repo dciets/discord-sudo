@@ -1,0 +1,17 @@
+version: "3.0"
+
+services:
+    discord_sudo_bot:
+        environment:
+            - "TOKEN=<DISCORD API KEY>"
+            - "YOUTUBE_APIKEY=<YOUTUBE API KEY>"
+            - "CAT_APIKEY=<THECATAPI API KEY>"
+            - "DOG_APIKEY=<THEDOGAPI API KEY>"
+            - "MONGO_DB=<URL TO THE MONGO DATABASE>"
+
+    # Only if you have a password on your database
+    discord_sudo_mongo:
+        environment:
+            - "MONGO_INITDB_ROOT_USERNAME=<MONGO USERNAME>"
+            - "MONGO_INITDB_ROOT_PASSWORD=<MONGO PASSWORD>"
+            - "MONGO_INITDB_DATABASE=admin"
