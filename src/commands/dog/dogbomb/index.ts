@@ -4,6 +4,10 @@ import Command from "../../command";
 import { search } from "../dogapi";
 
 class DogBomb extends Command {
+    constructor() {
+        super(["dogbomb", "dog bomb"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (!process.env.DOG_APIKEY)
             return message.reply("missing dog apikey :(");
@@ -16,4 +20,4 @@ class DogBomb extends Command {
     }
 }
 
-export default new DogBomb(["dogbomb", "dog bomb"]);
+export default new DogBomb();

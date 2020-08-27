@@ -7,6 +7,10 @@ import sbl from "../sbl";
 import Command from "../../command";
 
 class Soundboard extends Command {
+    constructor() {
+        super(["sb"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (!args[0]) return await sbl.execute(message, ...args);
 
@@ -43,4 +47,4 @@ class Soundboard extends Command {
     }
 }
 
-export default new Soundboard(["sb"]);
+export default new Soundboard();

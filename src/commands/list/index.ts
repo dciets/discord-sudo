@@ -4,6 +4,10 @@ import manager from "..";
 import Command from "../command";
 
 class List extends Command {
+    constructor() {
+        super(["list"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         const cmdset = new Set();
         const cmds = [];
@@ -19,4 +23,4 @@ class List extends Command {
     }
 }
 
-export default new List(["list"]);
+export default new List();

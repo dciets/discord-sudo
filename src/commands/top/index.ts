@@ -4,6 +4,10 @@ import { __ } from "i18n";
 import Command from "../command";
 
 class Top extends Command {
+    constructor() {
+        super(["top"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (args[0] && /^[A-z0-9]+/.test(args[0])) {
             const subreddit = await fetch(
@@ -93,4 +97,4 @@ class Top extends Command {
     }
 }
 
-export default new Top(["top"]);
+export default new Top();

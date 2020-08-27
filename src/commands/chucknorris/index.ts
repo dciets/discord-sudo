@@ -11,6 +11,10 @@ const icndb = (nb: number) =>
         .then((joke) => (joke ? htmldecode(joke) : null));
 
 class ChuckNorris extends Command {
+    constructor() {
+        super(["chucknorris", "cn"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         return message.reply(
             (await icndb(!isNaN(+args[0]) ? Number(args[0]) : -1)) ||
@@ -19,4 +23,4 @@ class ChuckNorris extends Command {
     }
 }
 
-export default new ChuckNorris(["chucknorris", "cn"]);
+export default new ChuckNorris();

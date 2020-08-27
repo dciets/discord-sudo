@@ -5,6 +5,10 @@ import sba from "../sba";
 import Command from "../../command";
 
 class SoundboardEdit extends Command {
+    constructor() {
+        super(["sbe"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (!args[0] || !args[1]) return message.reply("sbe key [me|here|url]");
 
@@ -32,4 +36,4 @@ class SoundboardEdit extends Command {
     }
 }
 
-export default new SoundboardEdit(["sbe"]);
+export default new SoundboardEdit();

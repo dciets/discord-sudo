@@ -3,6 +3,10 @@ import DiscordJS from "discord.js";
 import Command from "../command";
 
 class Help extends Command {
+    constructor() {
+        super(["help", "?"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         switch (args[0]) {
             case "8ball":
@@ -31,4 +35,4 @@ class Help extends Command {
     }
 }
 
-export default new Help(["help", "?"]);
+export default new Help();

@@ -11,6 +11,10 @@ import { waitFor, autodisconnect } from "../../../util";
 import Command from "../../command";
 
 class SoundboardAdd extends Command {
+    constructor() {
+        super(["sba"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (!args[0] || !args[1]) return message.reply("sba key [me|here|url]");
 
@@ -220,4 +224,4 @@ class SoundboardAdd extends Command {
     }
 }
 
-export default new SoundboardAdd(["sba"]);
+export default new SoundboardAdd();

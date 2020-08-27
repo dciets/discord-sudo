@@ -10,6 +10,10 @@ const PER_PAGE = Math.min(
 );
 
 class SoundboardList extends Command {
+    constructor() {
+        super(["sbl"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         const sbs = await soundboard
             .find({ gid: message.guild?.id, key: { $regex: args[0] || "" } })
@@ -62,4 +66,4 @@ class SoundboardList extends Command {
     }
 }
 
-export default new SoundboardList(["sbl"]);
+export default new SoundboardList();

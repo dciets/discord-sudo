@@ -19,6 +19,10 @@ const fetchXKCD = async (n?: any) => {
 };
 
 class XKCD extends Command {
+    constructor() {
+        super(["xkcd"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         let post = null;
 
@@ -43,4 +47,4 @@ class XKCD extends Command {
     }
 }
 
-export default new XKCD(["xkcd"]);
+export default new XKCD();

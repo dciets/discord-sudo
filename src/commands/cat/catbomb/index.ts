@@ -4,6 +4,10 @@ import Command from "../../command";
 import { search } from "../catapi";
 
 class CatBomb extends Command {
+    constructor() {
+        super(["catbomb", "cat bomb"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (!process.env.CAT_APIKEY)
             return message.reply("missing cat apikey :(");
@@ -16,4 +20,4 @@ class CatBomb extends Command {
     }
 }
 
-export default new CatBomb(["catbomb", "cat bomb"]);
+export default new CatBomb();

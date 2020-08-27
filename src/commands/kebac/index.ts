@@ -5,6 +5,10 @@ import fetch from "node-fetch";
 import Command from "../command";
 
 class Kebac extends Command {
+    constructor() {
+        super(["kebac"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (args.length > 0) {
             const qs = `french=${encodeURIComponent(args.join(" "))}`;
@@ -19,4 +23,4 @@ class Kebac extends Command {
     }
 }
 
-export default new Kebac(["kebac"]);
+export default new Kebac();

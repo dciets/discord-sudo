@@ -5,6 +5,10 @@ import random from "../random";
 import Command from "../command";
 
 class SurUn extends Command {
+    constructor() {
+        super(["surun", "sur un"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (args.length > 1 && /^\d+$/.test(args[0])) {
             const r = random.range(1, Number(args[0]));
@@ -18,4 +22,4 @@ class SurUn extends Command {
     }
 }
 
-export default new SurUn(["surun", "sur un"]);
+export default new SurUn();

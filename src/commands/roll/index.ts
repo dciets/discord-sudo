@@ -5,6 +5,10 @@ import random from "../random";
 import Command from "../command";
 
 class Roll extends Command {
+    constructor() {
+        super(["roll"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (args.length === 0)
             return message.reply(
@@ -70,4 +74,4 @@ class Roll extends Command {
     }
 }
 
-export default new Roll(["roll"]);
+export default new Roll();

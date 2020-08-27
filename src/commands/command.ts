@@ -1,8 +1,9 @@
 import DiscordJS from "discord.js";
+import ICommand from "./icommand";
 
 import Manager from ".";
 
-class Command {
+class Command implements ICommand {
     constructor(prefixes: string[]) {
         Manager.register(prefixes, this);
     }

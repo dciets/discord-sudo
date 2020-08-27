@@ -9,6 +9,10 @@ const youtubeV3 = google.youtube({
 });
 
 class Youtube extends Command {
+    constructor() {
+        super(["youtube", "yt"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (args.length > 0) {
             if (!process.env.YOUTUBE_APIKEY)
@@ -35,4 +39,4 @@ class Youtube extends Command {
     }
 }
 
-export default new Youtube(["youtube", "yt"]);
+export default new Youtube();

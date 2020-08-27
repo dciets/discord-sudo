@@ -1,8 +1,13 @@
 import DiscordJS from "discord.js";
 import fetch from "node-fetch";
+
 import Command from "../../command";
 
 class Meetup extends Command {
+    constructor() {
+        super(["meetup"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (args.length !== 1) {
             return message.reply(
@@ -22,4 +27,4 @@ class Meetup extends Command {
     }
 }
 
-export default new Meetup(["meetup"]);
+export default new Meetup();

@@ -1,7 +1,7 @@
 import DiscordJS from "discord.js";
 import i18n from "i18n";
 
-import Command from "./command";
+import ICommand from "./icommand";
 import permissions from "./permissions";
 import init from "./init";
 
@@ -10,13 +10,13 @@ import { lock } from "../util";
 const prefix = "sudo ";
 
 class Manager {
-    private _commands: { [key: string]: Command } = {};
+    private _commands: { [key: string]: ICommand } = {};
 
     public async init() {
         return await init();
     }
 
-    public register(prefixes: string[], command: Command) {
+    public register(prefixes: string[], command: ICommand) {
         if (prefixes.length === 0)
             throw new Error("Please register at least 1 prefix for a command");
 

@@ -10,6 +10,10 @@ const PER_PAGE = Math.min(
 );
 
 class DogWith extends Command {
+    constructor() {
+        super(["dogwith", "dog with"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (!process.env.DOG_APIKEY)
             return message.reply("missing dog apikey :(");
@@ -65,4 +69,4 @@ class DogWith extends Command {
     }
 }
 
-export default new DogWith(["dogwith", "dog with"]);
+export default new DogWith();

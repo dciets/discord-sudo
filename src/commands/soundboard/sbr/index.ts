@@ -4,6 +4,10 @@ import soundboard from "../../../db/soundboard";
 import Command from "../../command";
 
 class SoundboardRemove extends Command {
+    constructor() {
+        super(["sbr"]);
+    }
+
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         if (!args[0]) return message.reply("sbr key");
 
@@ -31,4 +35,4 @@ class SoundboardRemove extends Command {
     }
 }
 
-export default new SoundboardRemove(["sbr"]);
+export default new SoundboardRemove();
