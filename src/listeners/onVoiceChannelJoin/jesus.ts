@@ -9,17 +9,17 @@ export default (oldState: VoiceState, newState: VoiceState) => {
     const client = newState.guild.client;
     const sudoChannel = newState.guild.channels.cache.find((c) => c.name === "sudo" && c.type === "text") as TextChannel;
 
-    if (sudoChannel) {
-        const messageData = {
-            id: SnowflakeUtil.generate(),
-            author: newState.member,
-            content: "sudo sb avemaria",
-        };
+    if (!sudoChannel) return;
 
-        // Since this message never existed, flag this message has deleted to prevent reactions from the bot.
-        const commandMessage = new Message(client, messageData, sudoChannel);
-        commandMessage.deleted = true;
+    const messageData = {
+        id: SnowflakeUtil.generate(),
+        author: newState.member,
+        content: "sudo sb avemaria",
+    };
 
-        commands.execute(commandMessage);
-    }
+    // Since this message never existed, flag this message has deleted to prevent reactions from the bot.
+    const commandMessage = new Message(client, messageData, sudoChannel);
+    commandMessage.deleted = true;
+
+    commands.execute(commandMessage);
 };
