@@ -108,9 +108,12 @@ export const autodisconnect = (() => {
     const locks: { [key: string]: NodeJS.Timeout } = {};
 
     return (message: DiscordJS.Message) => {
-        const disconnect = () => {
-            if (message.guild?.me?.voice)
+        const disconnect = async () => {
+            if (message.guild?.me?.voice) {
+                const voiceConnection =  message.guild?.me?.voice?.connection
+                if (voiceConnection) await playSound(message.guild?.id, "salutla", voiceConnection).catch(e => {})
                 message.guild?.me.voice.channel?.leave();
+            }
         };
 
         if (!message.guild) return;
