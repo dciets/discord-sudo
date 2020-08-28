@@ -1,4 +1,6 @@
-import DiscordJS from "discord.js";
+import DiscordJS, { VoiceConnection } from "discord.js";
+import soundboard from "./db/soundboard";
+import { Readable } from "stream";
 
 export const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -120,3 +122,23 @@ export const autodisconnect = (() => {
         }
     };
 })();
+
+export const playSound = async (gid: string, sound: string, connection: VoiceConnection) => {
+    const file = await soundboard.findOne({ gid, key: sound });
+
+    if (!file) throw new Error("sound not found");
+
+    const readable = new Readable({
+        read() {
+            this.push(file.val);
+            this.push(null);
+        },
+    });
+
+    const dispatcher = connection.play(readable);
+
+    await waitFor(dispatcher, "finish");
+
+    dispatcher.end();
+    readable.destroy();
+}
