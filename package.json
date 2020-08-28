@@ -38,5 +38,8 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "prettier": {
+      "tabWidth": 4
+    }
 }
