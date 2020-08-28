@@ -43,7 +43,7 @@ class Soundboard extends Command {
             readable.destroy();
         }
 
-        return message.react("👍");
+        if (!message.deleted) message.react("👍");
     }
 }
 
