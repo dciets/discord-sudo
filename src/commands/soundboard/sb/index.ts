@@ -3,7 +3,6 @@ import DiscordJS from "discord.js";
 import { autodisconnect, playSound } from "../../../util";
 import sbl from "../sbl";
 import Command from "../../command";
-import playSound from "../playSound";
 
 class Soundboard extends Command {
     constructor() {
