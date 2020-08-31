@@ -4,7 +4,7 @@ import { waitFor } from '../util';
 export default (client: Client) => {
     return () => {
         client.guilds?.cache.each(async ({ channels }) => {
-            const generalText = channels.cache.find(c => c.type === "text" && c.name === "général") as TextChannel
+            const generalText = channels.cache.find(c => c.type === "text" && c.name === "sudo") as TextChannel
             if (generalText) generalText.send("🔥 blaze it 🌿🔥");
 
             const generalVoice = channels.cache.find(c => c.type === "voice" && c.name === "Général") as VoiceChannel
