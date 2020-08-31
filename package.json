@@ -24,7 +24,7 @@
         "typescript": "^3.9.7"
     },
     "scripts": {
-        "docker": "docker-compose build && docker-compose down && docker-compose up -d && docker-compose logs -f",
+        "docker": "docker-compose build && docker-compose up -d && docker-compose logs -f",
         "postinstall": "npm audit fix",
         "prestart": "npm run build",
         "dbs": "docker run -it --rm -p27017:27017 mongo",
@@ -33,8 +33,7 @@
         "clean": "rm -rf ./out || true",
         "prebuild": "npm run clean",
         "build": "tsc",
-        "postbuild": "cp -R package* locales assets tmp ./out",
-        "tar": "tar --show-transformed-names --transform='s,^.,./sudo,' --exclude=./data --exclude=./.git --exclude=./sudo.tar --exclude=./node_modules --exclude=./out -cvf sudo.tar ."
+        "postbuild": "cp -R package* locales assets tmp ./out"
     },
     "keywords": [],
     "author": "",
