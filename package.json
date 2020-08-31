@@ -5,7 +5,6 @@
     "main": "index.js",
     "dependencies": {
         "@discordjs/opus": "^0.3.2",
-        "@types/cron": "^1.7.2",
         "cron": "^1.8.2",
         "discord.js": "^12.3.1",
         "dotenv": "^8.2.0",
@@ -17,6 +16,7 @@
         "owoify-js": "^1.0.7"
     },
     "devDependencies": {
+        "@types/cron": "^1.7.2",
         "@types/ffmpeg-static": "^3.0.0",
         "@types/i18n": "^0.8.7",
         "@types/mongoose": "^5.7.36",
