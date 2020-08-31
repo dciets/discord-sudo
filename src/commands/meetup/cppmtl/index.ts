@@ -9,6 +9,7 @@ class CppMtl extends Command {
     }
 
     public async execute(message: DiscordJS.Message, ...args: string[]) {
+        await message.react("🍕");
         return Meetup.execute(message, "CppMtl");
     }
 }
