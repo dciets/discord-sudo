@@ -33,7 +33,7 @@ class SoundboardList extends Command {
                     if (!user) return str + `unknown`;
                     return str + (user.nickname || user.user.username);
                 })
-                .join("\n") || "(no soundboards added)") +
+                .join("\n") || "(no soundboard found)") +
             "```";
 
         const mess = await message.reply(sbstostr(0));
