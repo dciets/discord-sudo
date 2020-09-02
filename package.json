@@ -5,6 +5,7 @@
     "main": "index.js",
     "dependencies": {
         "@discordjs/opus": "^0.3.2",
+        "cron": "^1.8.2",
         "discord.js": "^12.3.1",
         "dotenv": "^8.2.0",
         "ffmpeg-static": "^4.2.7",
@@ -15,6 +16,7 @@
         "owoify-js": "^1.0.7"
     },
     "devDependencies": {
+        "@types/cron": "^1.7.2",
         "@types/ffmpeg-static": "^3.0.0",
         "@types/i18n": "^0.8.7",
         "@types/mongoose": "^5.7.36",
@@ -24,7 +26,7 @@
         "typescript": "^3.9.7"
     },
     "scripts": {
-        "docker": "docker-compose build && docker-compose down && docker-compose up -d && docker-compose logs -f",
+        "docker": "docker-compose build && docker-compose up -d && docker-compose logs -f",
         "postinstall": "npm audit fix",
         "prestart": "npm run build",
         "dbs": "docker run -it --rm -p27017:27017 mongo",
@@ -33,13 +35,12 @@
         "clean": "rm -rf ./out || true",
         "prebuild": "npm run clean",
         "build": "tsc",
-        "postbuild": "cp -R package* locales assets tmp ./out",
-        "tar": "tar --show-transformed-names --transform='s,^.,./sudo,' --exclude=./data --exclude=./.git --exclude=./sudo.tar --exclude=./node_modules --exclude=./out -cvf sudo.tar ."
+        "postbuild": "cp -R package* locales assets tmp ./out"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "prettier": {
-      "tabWidth": 4
+        "tabWidth": 4
     }
 }

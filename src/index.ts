@@ -14,6 +14,7 @@ dotenv.config();
 import * as db from "./db";
 import commands from "./commands";
 import onVoiceChannelJoin from "./listeners/onVoiceChannelJoin";
+import { startCronJobs } from './crons'
 
 if (!process.env.TOKEN) {
     console.error("missing token");
@@ -21,7 +22,10 @@ if (!process.env.TOKEN) {
 }
 
 const client: DiscordJS.Client = new DiscordJS.Client()
-    .on("ready", () => console.log("connected :)"))
+    .on("ready", () => {
+        console.log("connected :)");
+        startCronJobs(client);
+    })
     .on("rateLimit", (rateLimit: DiscordJS.RateLimitData) =>
         console.warn("rateLimit", rateLimit)
     )
