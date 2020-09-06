@@ -4,12 +4,12 @@ services:
     discord_sudo_bot:
         environment:
             - "TOKEN=<DISCORD API KEY>"
-            - "YOUTUBE_APIKEY=<YOUTUBE API KEY>"
-            - "CAT_APIKEY=<THECATAPI API KEY>"
-            - "DOG_APIKEY=<THEDOGAPI API KEY>"
             - "MONGO_DB=<URL TO THE MONGO DATABASE>"
 
-    # Only if you have a password on your database
+            - "YOUTUBE_APIKEY="
+            - "CAT_APIKEY="
+            - "DOG_APIKEY="
+
     discord_sudo_mongo:
         environment:
             - "MONGO_INITDB_ROOT_USERNAME=<MONGO USERNAME>"
