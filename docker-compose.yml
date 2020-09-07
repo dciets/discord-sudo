@@ -5,6 +5,7 @@ services:
         image: discord_sudo
         build: .
         hostname: discord_sudo
+        restart: unless-stopped
         environment:
             - "NODE_ENV=production"
             - "MONGO_DB=mongodb://discord_sudo_mongo:27017/prod"
@@ -14,6 +15,7 @@ services:
     discord_sudo_mongo:
         image: mongo
         hostname: discord_sudo_mongo
+        restart: unless-stopped
         volumes:
             - ./data:/data/db
         expose:
