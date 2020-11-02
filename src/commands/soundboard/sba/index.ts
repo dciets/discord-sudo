@@ -2,12 +2,10 @@ import DiscordJS from "discord.js";
 import fetch from "node-fetch";
 import path from "path";
 import fs from "fs";
-import { spawn } from "child_process";
-import ffmpeg_static from "ffmpeg-static";
 
 import soundboard from "../../../db/soundboard";
 
-import { waitFor, autodisconnect } from "../../../util";
+import { waitFor, autodisconnect, ffmpegSpawner } from "../../../util";
 import Command from "../../command";
 
 class SoundboardAdd extends Command {
@@ -42,33 +40,21 @@ class SoundboardAdd extends Command {
                 mode: "pcm",
             });
 
-            const ffmpeg = spawn(
-                ffmpeg_static,
-                [
-                    "-ar",
-                    "48000",
-                    "-ac",
-                    "2",
-                    "-f",
-                    "s16le",
-                    "-t",
-                    "10",
-                    "-i",
-                    "pipe:0",
-                    "-f",
-                    "mp3",
-                    "pipe:1",
-                ],
+            const ffmpeg = ffmpegSpawner(
                 {
-                    stdio: [
-                        "pipe",
-                        "pipe",
-                        process.env.NODE_ENV !== "production"
-                            ? "inherit"
-                            : "ignore",
-                    ],
-                }
+                    ar: 48000,
+                    ac: 2,
+                    informat: "s16le",
+                    timelength: 10,
+                    input: "pipe:0",
+                    outformat: "mp3",
+                    output: "pipe:1",
+                },
+                { stdin: "pipe", stdout: "pipe" }
             );
+
+            if (!ffmpeg.stdout || !ffmpeg.stdin)
+                throw new Error("missing stds");
 
             const bufs: Buffer[] = [];
             ffmpeg.stdout.on("data", (buf) => bufs.push(buf));
@@ -117,36 +103,21 @@ class SoundboardAdd extends Command {
                 (s) => !!s
             );
 
-            const ffmpeg = spawn(
-                ffmpeg_static,
-                [
-                    "-ar",
-                    "48000",
-                    "-ac",
-                    "2",
-                    "-f",
-                    "s16le",
-                    "-t",
-                    "10",
-                    ...ids.reduce((a: string[], b) => {
-                        a.push("-i", b);
-                        return a;
-                    }, []),
-                    "-f",
-                    "mp3",
-                    "pipe:1",
-                ],
+            const ffmpeg = ffmpegSpawner(
                 {
-                    stdio: [
-                        "ignore",
-                        "pipe",
-                        process.env.NODE_ENV !== "production"
-                            ? "inherit"
-                            : "ignore",
-                    ],
-                    cwd: ".",
-                }
+                    ar: 48000,
+                    ac: 2,
+                    informat: "s16le",
+                    timelength: 10,
+                    input: ids,
+                    outformat: "mp3",
+                    output: "pipe:1",
+                },
+                { stdin: "ignore", stdout: "pipe" }
             );
+
+            if (!ffmpeg.stdout || !ffmpeg.stdin)
+                throw new Error("missing stds");
 
             const bufs: Buffer[] = [];
             ffmpeg.stdout.on("data", (buf) => bufs.push(buf));
@@ -175,31 +146,18 @@ class SoundboardAdd extends Command {
                 timeout: 5000,
             }).then((r) => r.body);
 
-            const ffmpeg = spawn(
-                ffmpeg_static,
-                [
-                    "-i",
-                    "pipe:0",
-                    "-codec:a",
-                    "libmp3lame",
-                    "-qscale:a",
-                    "2",
-                    "-f",
-                    "mp3",
-                    "-t",
-                    "10",
-                    "pipe:1",
-                ],
+            const ffmpeg = ffmpegSpawner(
                 {
-                    stdio: [
-                        "pipe",
-                        "pipe",
-                        process.env.NODE_ENV !== "production"
-                            ? "inherit"
-                            : "ignore",
-                    ],
-                }
+                    input: "pipe:0",
+                    timelength: 10,
+                    outformat: "mp3",
+                    output: "pipe:1",
+                },
+                { stdin: "pipe", stdout: "pipe" }
             );
+
+            if (!ffmpeg.stdout || !ffmpeg.stdin)
+                throw new Error("missing stds");
 
             stream.pipe(ffmpeg.stdin).once("error", console.error);
 

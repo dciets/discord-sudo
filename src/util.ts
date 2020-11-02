@@ -1,6 +1,9 @@
 import DiscordJS, { VoiceConnection } from "discord.js";
+import { Readable, Stream, Writable } from "stream";
+import { ChildProcessByStdio, spawn } from "child_process";
+import ffmpeg_static from "ffmpeg-static";
+
 import soundboard from "./db/soundboard";
-import { Readable } from "stream";
 
 export const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -110,8 +113,13 @@ export const autodisconnect = (() => {
     return (message: DiscordJS.Message) => {
         const disconnect = async () => {
             if (message.guild?.me?.voice) {
-                const voiceConnection =  message.guild?.me?.voice?.connection
-                if (voiceConnection) await playSound(message.guild?.id, "salutla", voiceConnection).catch(e => {})
+                const voiceConnection = message.guild?.me?.voice?.connection;
+                if (voiceConnection)
+                    await playSound(
+                        message.guild?.id,
+                        "salutla",
+                        voiceConnection
+                    ).catch((e) => {});
                 message.guild?.me.voice.channel?.leave();
             }
         };
@@ -126,7 +134,11 @@ export const autodisconnect = (() => {
     };
 })();
 
-export const playSound = async (gid: string, sound: string, connection: VoiceConnection) => {
+export const playSound = async (
+    gid: string,
+    sound: string,
+    connection: VoiceConnection
+) => {
     const file = await soundboard.findOne({ gid, key: sound });
 
     if (!file) throw new Error("sound not found");
@@ -144,4 +156,63 @@ export const playSound = async (gid: string, sound: string, connection: VoiceCon
 
     dispatcher.end();
     readable.destroy();
-}
+};
+
+export const ffmpegSpawner = (
+    params: {
+        ar?: number;
+        ac?: number;
+        timelength?: number;
+        informat?: string;
+        input: string | string[];
+        outformat?: string;
+        output: string;
+    },
+    pipes: {
+        stdin:
+            | number
+            | Stream
+            | "pipe"
+            | "inherit"
+            | "ignore"
+            | "ipc"
+            | null
+            | undefined;
+        stdout:
+            | number
+            | Stream
+            | "pipe"
+            | "inherit"
+            | "ignore"
+            | "ipc"
+            | null
+            | undefined;
+    }
+) => {
+    const args = [
+        "-vn", // cut video
+        ...(params.ar ? ["-ar", params.ar + ""] : []),
+        ...(params.ac ? ["-ac", params.ac + ""] : []),
+        ...(params.informat ? ["-f", params.informat] : []),
+        ...(params.timelength ? ["-t", params.timelength + ""] : []),
+        ...(typeof params.input === "string"
+            ? ["-i", params.input || "pipe:0"]
+            : params.input.length === 0
+            ? ["-i", "pipe:0"]
+            : params.input.reduce(
+                  (acc: string[], input) => [...acc, "-i", input],
+                  []
+              )),
+        ...(params.outformat ? ["-f", params.outformat] : []),
+        params.output || "pipe:1",
+    ].filter((x) => !!x);
+
+    return spawn(ffmpeg_static, args, {
+        stdio: [
+            pipes.stdin,
+            pipes.stdout,
+            process.env.NODE_ENV !== "production" ? "inherit" : "ignore",
+        ],
+        cwd: ".",
+    });
+};

@@ -1,5 +1,7 @@
+declare var gtts: any;
+const gTTS = require("gtts");
+
 import DiscordJS from "discord.js";
-import gTTS from "gtts";
 import fs from "fs";
 
 import Command from "../command";
@@ -90,6 +92,16 @@ class TextToSpeech extends Command {
     public async execute(message: DiscordJS.Message, ...args: string[]) {
         const channel = message.member?.voice.channel;
         const guildId = message.guild?.id;
+
+        if (args.length === 1 && args[0] === "?") {
+            return message.reply(
+                "```\n" +
+                    Object.keys(LANGUAGES)
+                        .map((lang) => `${lang} => ${(LANGUAGES as any)[lang]}`)
+                        .join("\n") +
+                    "\n```"
+            );
+        }
 
         if (!channel || !guildId) return message.react("🔇");
 
