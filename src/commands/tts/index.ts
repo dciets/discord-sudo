@@ -1,7 +1,5 @@
-declare var gtts: any;
-const gTTS = require("gtts");
-
 import DiscordJS from "discord.js";
+import gTTS from "gtts";
 import fs from "fs";
 
 import Command from "../command";

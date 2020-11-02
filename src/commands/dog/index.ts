@@ -1,3 +1,5 @@
-require("./dogbomb");
-require("./dogme");
-require("./dogwith");
+import("./dogbomb");
+import("./dogme");
+import("./dogwith");
+
+export {};

@@ -1,3 +1,5 @@
-require("./catbomb");
-require("./catme");
-require("./catwith");
+import("./catbomb");
+import("./catme");
+import("./catwith");
+
+export {};

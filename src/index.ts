@@ -14,7 +14,7 @@ dotenv.config();
 import * as db from "./db";
 import commands from "./commands";
 import onVoiceChannelJoin from "./listeners/onVoiceChannelJoin";
-import { startCronJobs } from './crons'
+import { startCronJobs } from "./crons";
 
 if (!process.env.TOKEN) {
     console.error("missing token");
@@ -38,6 +38,4 @@ const client: DiscordJS.Client = new DiscordJS.Client()
         }
     });
 
-Promise.all([db.init(), commands.init()]).then(() =>
-    client.login(process.env.TOKEN)
-);
+db.init().then(() => client.login(process.env.TOKEN));

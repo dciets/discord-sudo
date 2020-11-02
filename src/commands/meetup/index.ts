@@ -1,2 +1,4 @@
-require("./cppmtl");
-require("./meetup");
+import("./cppmtl");
+import("./meetup");
+
+export {};

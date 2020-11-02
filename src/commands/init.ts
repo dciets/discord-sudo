@@ -1,16 +1,21 @@
-import fs from "fs";
-import path from "path";
+import("./8ball");
+import("./cat");
+import("./chucknorris");
+import("./dog");
+import("./github");
+import("./help");
+import("./kebac");
+import("./list");
+import("./meetup");
+import("./owo");
+import("./pick");
+import("./roll");
+import("./sl");
+import("./soundboard");
+import("./surun");
+import("./top");
+import("./tts");
+import("./xkcd");
+import("./youtube");
 
-export default () =>
-    fs.promises
-        .readdir(__dirname, { withFileTypes: true })
-        .then((files) => files.filter((file) => file.isDirectory()))
-        .then((directories) =>
-            directories.map((dir) => {
-                try {
-                    require(path.join(__dirname, dir.name));
-                } catch (e) {
-                    console.error("unable to load", dir.name, e);
-                }
-            })
-        );
+export {};
