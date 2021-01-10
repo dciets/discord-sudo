@@ -9,6 +9,7 @@ services:
             - "YOUTUBE_APIKEY="
             - "CAT_APIKEY="
             - "DOG_APIKEY="
+            - "TWITCH_APIKEY="
 
     discord_sudo_mongo:
         environment:
