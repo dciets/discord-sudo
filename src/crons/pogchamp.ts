@@ -1,6 +1,7 @@
 import { Client } from "discord.js";
 import fetch from "node-fetch";
 
+let lastpogchampid: any = null;
 export default (client: Client) => {
     return async () => {
         const globalemoteset = await fetch(
@@ -18,6 +19,9 @@ export default (client: Client) => {
         const pogchampid = globalemoteset.find(
             ({ code }: { code: string; id: string }) => code === "PogChamp"
         ).id;
+
+        if (pogchampid === lastpogchampid) return;
+        lastpogchampid = pogchampid;
 
         const newpogchamp = await fetch(
             `https://static-cdn.jtvnw.net/emoticons/v1/${pogchampid}/4.0`
