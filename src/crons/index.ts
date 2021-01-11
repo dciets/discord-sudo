@@ -14,7 +14,7 @@ export function startCronJobs(client: Client) {
     );
 
     new cron.CronJob(
-        "0 0 */4 * * *",
+        "0 0 * * * *",
         pogchamp(client),
         null,
         true,
