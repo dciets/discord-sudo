@@ -40,11 +40,14 @@ export default (client: Client) => {
             }
         );
 
-        client.guilds?.cache.each(async (guild) => {
+        const guilds = client.guilds?.cache;
+        if (!guilds) return;
+
+        for (let guild of guilds.array()) {
             await guild.emojis.cache
                 .find((emoji) => emoji.name === "PogChamp")
                 ?.delete();
-            guild.emojis.create(newpogchamp, "PogChamp");
-        });
+            await guild.emojis.create(newpogchamp, "PogChamp");
+        }
     };
 };
