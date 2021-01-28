@@ -17,5 +17,6 @@ import("./top");
 import("./tts");
 import("./xkcd");
 import("./youtube");
+import("./zalgo");
 
 export {};
