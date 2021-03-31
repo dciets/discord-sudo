@@ -1,0 +1,20 @@
+name: ci
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    name: update
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Update the service remotely
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: update wap
