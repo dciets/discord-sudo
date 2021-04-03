@@ -1,4 +1,5 @@
 import("./8ball");
+import("./brian");
 import("./cat");
 import("./chucknorris");
 import("./dog");
