@@ -18,6 +18,8 @@ class Brian extends Command {
         if (!channel || !guildId) return message.react("🔇");
 
         const connection = await channel.join();
+        if (!connection) return message.react("🔇");
+        autodisconnect(message);
 
         const text = args.join(" ");
         let response = await fetch(
