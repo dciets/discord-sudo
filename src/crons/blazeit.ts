@@ -7,7 +7,9 @@ export default function (client: Client) {
             const generalVoice = channels.cache.find(
                 (c) => c.type === "voice" && c.name === "Général"
             ) as VoiceChannel;
+
             if (!generalVoice) return;
+            if (generalVoice.members.size == 0) return;
 
             const connection = await generalVoice.join();
             const dispatcher = connection.play(
