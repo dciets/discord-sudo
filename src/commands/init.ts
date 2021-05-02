@@ -5,6 +5,7 @@ import("./chucknorris");
 import("./dog");
 import("./github");
 import("./help");
+import("./intro");
 import("./kebac");
 import("./list");
 import("./meetup");
