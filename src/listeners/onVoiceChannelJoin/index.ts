@@ -1,10 +1,6 @@
 import { VoiceState } from "discord.js";
-import jesus from "./jesus";
-import zergov from "./zergov";
-import emilio from "./emilio";
+import introSounds from "./introSounds";
 
 export default (oldState: VoiceState, newState: VoiceState) => {
-    jesus(oldState, newState);
-    zergov(oldState, newState);
-    emilio(oldState, newState);
+    introSounds(oldState, newState);
 };

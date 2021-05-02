@@ -1,9 +1,18 @@
 import { Message, SnowflakeUtil, TextChannel, VoiceState } from "discord.js";
 import commands from "../../commands";
+import intro from "../../db/intro";
 
-const EMILIO_MEMBER_ID = "130865882963378176";
-export default (oldState: VoiceState, newState: VoiceState) => {
-    if (newState.member?.id !== EMILIO_MEMBER_ID) return;
+/**
+ * Play sounds when a user connects to a voice channel.
+ * To add a sound, use `sudo intro`.
+ */
+export default async (oldState: VoiceState, newState: VoiceState) => {
+
+    const introSound = await intro.findOne({
+        gid: newState.member?.guild.id,
+        uid: newState.member?.id
+    });
+    if (!introSound) return;
 
     const client = newState.guild.client;
     const sudoChannel = newState.guild.channels.cache.find((c) => c.name === "sudo" && c.type === "text") as TextChannel;
@@ -13,7 +22,7 @@ export default (oldState: VoiceState, newState: VoiceState) => {
     const messageData = {
         id: SnowflakeUtil.generate(),
         author: newState.member,
-        content: "sudo sb wiiSport",
+        content: `sudo sb ${introSound.key}`,
     };
 
     // Since this message never existed, flag this message as deleted to prevent reactions from the bot.
