@@ -1,10 +1,9 @@
 import { Message, SnowflakeUtil, TextChannel, VoiceState } from "discord.js";
 import commands from "../../commands";
 
-const ZERGOV_MEMBER_ID = "250111267258236929";
-
+const EMILIO_MEMBER_ID = "130865882963378176";
 export default (oldState: VoiceState, newState: VoiceState) => {
-    if (newState.member?.id !== ZERGOV_MEMBER_ID) return;
+    if (newState.member?.id !== EMILIO_MEMBER_ID) return;
 
     const client = newState.guild.client;
     const sudoChannel = newState.guild.channels.cache.find((c) => c.name === "sudo" && c.type === "text") as TextChannel;
@@ -14,7 +13,7 @@ export default (oldState: VoiceState, newState: VoiceState) => {
     const messageData = {
         id: SnowflakeUtil.generate(),
         author: newState.member,
-        content: "sudo sb chirp",
+        content: "sudo sb wiiSport",
     };
 
     // Since this message never existed, flag this message as deleted to prevent reactions from the bot.
