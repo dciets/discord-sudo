@@ -1,24 +1,24 @@
 version: "3.0"
 
 services:
-    discord_sudo_bot:
-        image: discord_sudo
-        build: .
-        hostname: discord_sudo
-        restart: unless-stopped
-        environment:
-            - "NODE_ENV=production"
-            - "MONGO_DB=mongodb://discord_sudo_mongo:27017/prod"
-        depends_on:
-            - discord_sudo_mongo
+  discord_sudo_bot:
+    image: discord_sudo
+    build: .
+    hostname: discord_sudo
+    restart: unless-stopped
+    environment:
+      - "NODE_ENV=production"
+      - "MONGO_DB=mongodb://discord_sudo_mongo:27017/prod"
+    depends_on:
+      - discord_sudo_mongo
 
-    discord_sudo_mongo:
-        image: mongo
-        hostname: discord_sudo_mongo
-        restart: unless-stopped
-        volumes:
-            - ./data:/data/db
-        expose:
-            - "27017"
-        ports:
-            - "27017:27017"
+  discord_sudo_mongo:
+    image: mongo
+    hostname: discord_sudo_mongo
+    restart: unless-stopped
+    volumes:
+      - ./data:/data/db
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"

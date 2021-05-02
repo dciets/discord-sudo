@@ -21,13 +21,13 @@ const sl = `
    \_/      \__/  \__/  \__/  \__/      \_/               \_/   \_/    \_/   \_/\`\`\``;
 
 class SteamLocomotive extends Command {
-    constructor() {
-        super(["sl"]);
-    }
+  constructor() {
+    super(["sl"]);
+  }
 
-    public async execute(message: DiscordJS.Message, ...args: string[]) {
-        return message.channel.send(sl);
-    }
+  public async execute(message: DiscordJS.Message, ...args: string[]) {
+    return message.channel.send(sl);
+  }
 }
 
 export default new SteamLocomotive();

@@ -4,14 +4,14 @@ import Command from "../../command";
 import Meetup from "../meetup";
 
 class CppMtl extends Command {
-    constructor() {
-        super(["cppmtl"]);
-    }
+  constructor() {
+    super(["cppmtl"]);
+  }
 
-    public async execute(message: DiscordJS.Message, ...args: string[]) {
-        await message.react("🍕");
-        return Meetup.execute(message, "CppMtl");
-    }
+  public async execute(message: DiscordJS.Message, ...args: string[]) {
+    await message.react("🍕");
+    return Meetup.execute(message, "CppMtl");
+  }
 }
 
 export default new CppMtl();
