@@ -17,7 +17,7 @@ export default (oldState: VoiceState, newState: VoiceState) => {
         content: "sudo sb avemaria",
     };
 
-    // Since this message never existed, flag this message has deleted to prevent reactions from the bot.
+    // Since this message never existed, flag this message as deleted to prevent reactions from the bot.
     const commandMessage = new Message(client, messageData, sudoChannel);
     commandMessage.deleted = true;
 
